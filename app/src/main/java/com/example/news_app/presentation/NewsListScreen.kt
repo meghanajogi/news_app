@@ -13,23 +13,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.news_app.Item
+import com.example.news_app.model.Item
 import com.example.news_app.NewsViewModel
 
 
-data class Item(val id: Int, val title: String)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  NewsListScreen(navController: NavController, viewModel: NewsViewModel = hiltViewModel()){
+fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hiltViewModel()){
     val items by viewModel.items.collectAsState()
 
+    LaunchedEffect(true) {
+        viewModel.loadItems() // Load items when the screen is displayed
+    }
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("List Screen") })
@@ -61,7 +65,7 @@ fun ListItem(item: Item, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = item.title, )
-            Text(text = item.description)
+            Text(text = item.body)
         }
     }
 }

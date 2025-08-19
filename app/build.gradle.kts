@@ -69,4 +69,10 @@ dependencies {
 
 // Hilt for Jetpack Compose Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // OkHttp logging interceptor for logging network requests
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 }

@@ -87,5 +87,6 @@ dependencies {
     // OkHttp logging interceptor for logging network requests
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
+    //image loading
     implementation("io.coil-kt:coil-compose:2.3.0")
 }

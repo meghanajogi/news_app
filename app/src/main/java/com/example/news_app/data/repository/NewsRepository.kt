@@ -1,6 +1,6 @@
 package com.example.news_app.data.repository
 
-import com.example.news_app.data.model.Item
+import com.example.news_app.data.model.NewsItem
 import com.example.news_app.network.ApiService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,12 +9,12 @@ import javax.inject.Singleton
 class NewsRepository  @Inject constructor(private val apiService: ApiService) {
 
 
-    suspend fun getUsers(): List<Item> {
-        val result=apiService.getUsers()
+    suspend fun getNews(): List<NewsItem> {
+        val result=apiService.getPosts()
         return result
     }
 
-    suspend fun getItemById(id:Int): Item {
+    suspend fun getItemById(id:Int): NewsItem {
         val result=apiService.getPostById(id)
         return result
     }

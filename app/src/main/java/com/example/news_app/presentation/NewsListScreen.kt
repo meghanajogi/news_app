@@ -9,23 +9,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.news_app.Item
+import com.example.news_app.NewsViewModel
 
 
 data class Item(val id: Int, val title: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  NewsListScreen(navController: NavController){
-    val items = List(10) { Item(it, "Item #$it") }
+fun  NewsListScreen(navController: NavController, viewModel: NewsViewModel = hiltViewModel()){
+    val items by viewModel.items.collectAsState()
 
     Scaffold(
         topBar = {
@@ -58,7 +61,7 @@ fun ListItem(item: Item, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = item.title, )
-            Text(text = "Click to view details")
+            Text(text = item.description)
         }
     }
 }

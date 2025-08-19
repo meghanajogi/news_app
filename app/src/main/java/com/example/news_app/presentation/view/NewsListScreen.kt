@@ -33,20 +33,14 @@ import androidx.navigation.NavController
 import com.example.news_app.data.model.Item
 import com.example.news_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import com.example.news_app.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hiltViewModel()){
     val items by viewModel.items.collectAsState()
 
-    LaunchedEffect(true) {
-        viewModel.loadItems() // Load items when the screen is displayed
-    }
+    viewModel.loadItems()
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("List Screen") })
@@ -86,7 +80,7 @@ fun ListItem(item: Item?, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Spacer(modifier = Modifier.height(16.dp))
-            ImageLoaderView("https://techcrunch.com/wp-content/uploads/2024/05/Minecraft-keyart.jpg?resize=1200,720")
+            ImageLoaderView(Constants.IMAGE_URL)
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = item?.title?:"",  style = TextStyle(
                 fontSize = 24.sp,
@@ -105,37 +99,7 @@ fun ListItem(item: Item?, onClick: () -> Unit) {
     }
 }
 
-@Composable
-fun LoadImage(imageUrl: String) {
-    val painter = rememberAsyncImagePainter(
-        ImageRequest.Builder(LocalContext.current)
-            .data(imageUrl)
-            .crossfade(true)
-            .build()
-    )
-    Log.d("The state is ${painter.state}","new")
-    when ( painter.state) {
 
-        is AsyncImagePainter.State.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
-        is AsyncImagePainter.State.Error -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Error loading image", color = Color.Red)
-            }
-        }
-        else -> {
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}
 
 
 

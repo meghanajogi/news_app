@@ -34,6 +34,7 @@ import com.example.news_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.news_app.R
+import com.example.news_app.ui.theme.myCustomFontFamily
 import com.example.news_app.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +45,11 @@ fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hilt
     viewModel.loadItems()
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(id = R.string.list_screen)) })
+            TopAppBar(title = { Text(stringResource(id = R.string.list_screen),style = TextStyle(
+                fontSize = 26.sp,
+                color = Color.Black,
+                fontFamily = myCustomFontFamily
+            )) })
         }
     ) { padding ->
 
@@ -85,16 +90,15 @@ fun ListItem(item: NewsItem?, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = item?.title?:"",  style = TextStyle(
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-
+               fontWeight = FontWeight.Bold,
+                fontFamily = myCustomFontFamily
             )
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = item?.body?:"",  style = TextStyle(
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Blue
-
+                color = Color.Blue,
+                fontFamily = myCustomFontFamily
             ))
         }
     }

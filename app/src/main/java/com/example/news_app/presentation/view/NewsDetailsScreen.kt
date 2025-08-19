@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.news_app.R
 import com.example.news_app.presentation.viewmodel.NewsViewModel
+import com.example.news_app.ui.theme.myCustomFontFamily
 import com.example.news_app.utils.Constants
 
 
@@ -43,7 +44,11 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(id = R.string.details_screen)) },  navigationIcon = {
+            TopAppBar(title = { Text(stringResource(id = R.string.details_screen),style = TextStyle(
+                fontSize = 26.sp,
+                color = Color.Black,
+                fontFamily = myCustomFontFamily
+            )) },  navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
@@ -59,14 +64,13 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
                 it.title?.let { text -> Text(text = text ,style = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-
+                    fontFamily = myCustomFontFamily
                     ))}
                 Spacer(modifier = Modifier.height(8.dp))
                 it.body?.let { text -> Text(text = text,style = TextStyle(
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Blue
-
+                    color = Color.Blue,
+                    fontFamily = myCustomFontFamily
                 )) }
 
                 ImageLoaderView(Constants.IMAGE_URL)

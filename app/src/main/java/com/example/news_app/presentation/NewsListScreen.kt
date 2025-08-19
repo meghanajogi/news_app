@@ -17,14 +17,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.news_app.model.Item
 import com.example.news_app.NewsViewModel
-
-
-
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,8 +65,18 @@ fun ListItem(item: Item, onClick: () -> Unit) {
 
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = item.title, )
-            Text(text = item.body)
+            Text(text = item.title,  style = TextStyle(
+                fontSize = 24.sp,          // Font size in scalable pixels
+                fontWeight = FontWeight.Bold, // Font weight (e.g., Bold, Normal)
+                        // Font color (using Color.Red here)
+            )
+            )
+            Text(text = item.body,  style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Blue
+
+            ))
         }
     }
 }

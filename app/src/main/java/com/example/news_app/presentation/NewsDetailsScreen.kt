@@ -21,7 +21,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.news_app.NewsViewModel
@@ -30,11 +34,13 @@ import com.example.news_app.NewsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsViewModel = hiltViewModel()) {
+    val item by viewModel.selectedItem.collectAsState()
+
 
     LaunchedEffect(itemId) {
         viewModel.loadItemById(itemId)
     }
-    val item by viewModel.selectedItem.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Detail Screen") },  navigationIcon = {
@@ -51,9 +57,18 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
                     .padding(padding)
                     .padding(16.dp)
             ) {
-                Text(text = it.title)
+                it.title?.let { text -> Text(text = text ,style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+
+                    ))}
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = it.description)
+                it.body?.let { text -> Text(text = text,style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Blue
+
+                )) }
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()

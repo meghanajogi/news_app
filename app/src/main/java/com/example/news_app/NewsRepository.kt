@@ -8,10 +8,14 @@ import javax.inject.Singleton
 @Singleton
 class NewsRepository  @Inject constructor(private val apiService: ApiService) {
 
-    fun getItemById(id: Int): Item = Item(id, "Item #$id", "Detailed description for item #$id","news")
 
     suspend fun getUsers(): List<Item> {
         val result=apiService.getUsers()
+        return result
+    }
+
+    suspend fun getItemById(id:Int): Item {
+        val result=apiService.getPostById(id)
         return result
     }
 }

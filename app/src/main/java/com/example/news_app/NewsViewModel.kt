@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.news_app.model.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,8 +18,8 @@ class NewsViewModel @Inject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
-    private val _items = MutableStateFlow<List<Item>>(emptyList())
-    val items: StateFlow<List<Item>> = _items
+    private val _items = MutableStateFlow<List<Item?>>(emptyList())
+    val items: StateFlow<List<Item?>> = _items
 
     private val _selectedItem = MutableStateFlow<Item?>(null)
     val selectedItem: StateFlow<Item?> = _selectedItem
@@ -34,9 +37,11 @@ class NewsViewModel @Inject constructor(
     }
 
     fun loadItemById(id: Int) {
+
         viewModelScope.launch {
             try {
-                _selectedItem.value = repository.getItemById(id)
+                val result = async(IO){repository.getItemById(id)}
+                _selectedItem.value = result.await()
             }catch (e: Exception) {
                 _selectedItem.value = null
             }

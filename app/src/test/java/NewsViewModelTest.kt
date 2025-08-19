@@ -1,23 +1,21 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.news_app.data.model.NewsItem
 import com.example.news_app.data.repository.NewsRepository
 import com.example.news_app.presentation.viewmodel.NewsViewModel
-import com.example.news_app.data.model.NewsItem
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import org.junit.Assert.*
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 
-@OptIn(ExperimentalCoroutinesApi::class)
+
 class NewsViewModelTest {
 
     // Rule to allow live data to work synchronously
@@ -31,9 +29,12 @@ class NewsViewModelTest {
     private lateinit var viewModel: NewsViewModel
 
     // Mock the repository
-    private val mockRepository: NewsRepository = mock()
+    @Mock
+    private lateinit var mockRepository: NewsRepository
 
-
+    // Initialize Mockito mocks
+    @get:Rule
+    val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @Before
     fun setup() {
@@ -48,11 +49,9 @@ class NewsViewModelTest {
     fun `test loadItems returns a list of items successfully`() = runTest {
         // Arrange
         val mockItems = listOf(
-             NewsItem(1, 1,"sunt aut facere repellat provident occaecati excepturi optio reprehenderit", "quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto"),
-
-
+            NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
         )
-        whenever(mockRepository.getNews()).thenReturn(mockItems)
+        `when`(mockRepository.getNews()).thenReturn(mockItems)
 
         // Act
         viewModel.loadItems()
@@ -66,7 +65,7 @@ class NewsViewModelTest {
     fun `test loadItems handles empty list`() = runTest {
         // Arrange
         val emptyList = emptyList<NewsItem>()
-        whenever(mockRepository.getNews()).thenReturn(emptyList)
+        `when`(mockRepository.getNews()).thenReturn(emptyList)
 
         // Act
         viewModel.loadItems()
@@ -79,7 +78,7 @@ class NewsViewModelTest {
     @Test
     fun `test loadItems handles error gracefully`() = runTest {
         // Arrange
-        whenever(mockRepository.getNews()).thenThrow(RuntimeException("Network Error"))
+        `when`(mockRepository.getNews()).thenThrow(RuntimeException("Network Error"))
 
         // Act
         viewModel.loadItems()
@@ -91,12 +90,17 @@ class NewsViewModelTest {
 
     @Test
     fun `test loadItemById fetches a specific item`() = runTest {
+
+
+       val item= NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
         // Arrange
-       val item= NewsItem(1, 1,"sunt aut facere repellat provident occaecati excepturi optio reprehenderit", "quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto")
-        whenever(mockRepository.getItemById(1)).thenReturn(item)
+       // val item = NewsItem(1, 1, "Test Title", "Test Description")
+        `when`(mockRepository.getItemById(1)).thenReturn(item)
 
         // Act
         viewModel.loadItemById(1)
+
+        advanceUntilIdle()
 
         // Assert
         val result = viewModel.selectedItem.first()
@@ -106,7 +110,7 @@ class NewsViewModelTest {
     @Test
     fun `test loadItemById returns null for non-existent item`() = runTest {
         // Arrange
-        whenever(mockRepository.getItemById(99)).thenThrow(NoSuchElementException("Item not found"))
+        `when`(mockRepository.getItemById(99)).thenThrow(NoSuchElementException("Item not found"))
 
         // Act
         viewModel.loadItemById(99)
@@ -121,6 +125,4 @@ class NewsViewModelTest {
         // Reset the dispatcher after the test
         Dispatchers.resetMain()
     }
-
 }
-

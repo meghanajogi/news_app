@@ -60,6 +60,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Mockito for Kotlin (provides 'whenever' function)
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.6.1")
+
+// Mocking framework
+    testImplementation("org.mockito:mockito-inline:4.6.1")
+// For mocking final classes and methods
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+// Coroutine testing
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+
+
     // ViewModel with Compose support
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2")
 
@@ -75,4 +86,5 @@ dependencies {
 
     // OkHttp logging interceptor for logging network requests
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+
 }

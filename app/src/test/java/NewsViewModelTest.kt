@@ -1,20 +1,23 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.news_app.data.repository.NewsRepository
 import com.example.news_app.presentation.viewmodel.NewsViewModel
-import com.example.news_app.data.model.Item
+import com.example.news_app.data.model.NewsItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.Assert.*
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
-
-
+@OptIn(ExperimentalCoroutinesApi::class)
 class NewsViewModelTest {
 
     // Rule to allow live data to work synchronously
@@ -31,7 +34,7 @@ class NewsViewModelTest {
     private val mockRepository: NewsRepository = mock()
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     @Before
     fun setup() {
         // Set the dispatcher to our test dispatcher to run coroutines synchronously
@@ -45,10 +48,10 @@ class NewsViewModelTest {
     fun `test loadItems returns a list of items successfully`() = runTest {
         // Arrange
         val mockItems = listOf(
-            Item(1, "Item 1", "item1@example.com", body = "news1"),
-            Item(2, "Item 2", "item2@example.com",body="news2")
+            NewsItem(1, "Item 1", "","news1"),
+            NewsItem(2, "Item 2", "","news2")
         )
-        whenever(mockRepository.getUsers()).thenReturn(mockItems)
+        whenever(mockRepository.getNews()).thenReturn(mockItems)
 
         // Act
         viewModel.loadItems()
@@ -61,8 +64,8 @@ class NewsViewModelTest {
     @Test
     fun `test loadItems handles empty list`() = runTest {
         // Arrange
-        val emptyList = emptyList<Item>()
-        whenever(mockRepository.getUsers()).thenReturn(emptyList)
+        val emptyList = emptyList<NewsItem>()
+        whenever(mockRepository.getNews()).thenReturn(emptyList)
 
         // Act
         viewModel.loadItems()
@@ -75,7 +78,7 @@ class NewsViewModelTest {
     @Test
     fun `test loadItems handles error gracefully`() = runTest {
         // Arrange
-        whenever(mockRepository.getUsers()).thenThrow(RuntimeException("Network Error"))
+        whenever(mockRepository.getNews()).thenThrow(RuntimeException("Network Error"))
 
         // Act
         viewModel.loadItems()
@@ -83,6 +86,39 @@ class NewsViewModelTest {
         // Assert
         val result = viewModel.items.first()
         assertTrue(result.isEmpty())  // You can assert for a default empty list or handle error gracefully in your ViewModel
+    }
+
+    @Test
+    fun `test loadItemById fetches a specific item`() = runTest {
+        // Arrange
+       val item= NewsItem(1, "Item 1", "", "news1")
+        whenever(mockRepository.getItemById(1)).thenReturn(item)
+
+        // Act
+        viewModel.loadItemById(1)
+
+        // Assert
+        val result = viewModel.selectedItem.first()
+        assertEquals(item, result)
+    }
+
+    @Test
+    fun `test loadItemById returns null for non-existent item`() = runTest {
+        // Arrange
+        whenever(mockRepository.getItemById(99)).thenThrow(NoSuchElementException("Item not found"))
+
+        // Act
+        viewModel.loadItemById(99)
+
+        // Assert
+        val result = viewModel.selectedItem.first()
+        assertNull(result)
+    }
+
+    @After
+    fun tearDown() {
+        // Reset the dispatcher after the test
+        Dispatchers.resetMain()
     }
 
 }

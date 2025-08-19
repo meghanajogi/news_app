@@ -48,8 +48,9 @@ class NewsViewModelTest {
     fun `test loadItems returns a list of items successfully`() = runTest {
         // Arrange
         val mockItems = listOf(
-            NewsItem(1, "Item 1", "","news1"),
-            NewsItem(2, "Item 2", "","news2")
+             NewsItem(1, 1,"sunt aut facere repellat provident occaecati excepturi optio reprehenderit", "quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto"),
+
+
         )
         whenever(mockRepository.getNews()).thenReturn(mockItems)
 
@@ -57,7 +58,7 @@ class NewsViewModelTest {
         viewModel.loadItems()
 
         // Assert
-        val result = viewModel.items.first()  // Collect the items from the StateFlow
+        val result = viewModel.items.first() // Collect the items from the StateFlow
         assertEquals(mockItems, result)
     }
 
@@ -91,7 +92,7 @@ class NewsViewModelTest {
     @Test
     fun `test loadItemById fetches a specific item`() = runTest {
         // Arrange
-       val item= NewsItem(1, "Item 1", "", "news1")
+       val item= NewsItem(1, 1,"sunt aut facere repellat provident occaecati excepturi optio reprehenderit", "quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto")
         whenever(mockRepository.getItemById(1)).thenReturn(item)
 
         // Act

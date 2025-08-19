@@ -1,6 +1,6 @@
 package com.example.news_app.network
 
-import com.example.news_app.model.Item
+import com.example.news_app.data.model.Item
 import retrofit2.http.GET
 import retrofit2.http.Path
 

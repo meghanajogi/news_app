@@ -1,4 +1,4 @@
-package com.example.news_app.presentation
+package com.example.news_app.presentation.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.news_app.NewsViewModel
+import com.example.news_app.presentation.viewmodel.NewsViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)

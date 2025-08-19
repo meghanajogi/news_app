@@ -1,6 +1,6 @@
-package com.example.news_app
+package com.example.news_app.data.repository
 
-import com.example.news_app.model.Item
+import com.example.news_app.data.model.Item
 import com.example.news_app.network.ApiService
 import javax.inject.Inject
 import javax.inject.Singleton

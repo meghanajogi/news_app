@@ -1,16 +1,16 @@
-package com.example.news_app
+package com.example.news_app.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.news_app.model.Item
+import com.example.news_app.data.model.Item
+import com.example.news_app.data.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
@@ -39,7 +39,7 @@ class NewsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val result = async(IO){repository.getItemById(id)}
+                val result = async(Dispatchers.IO){repository.getItemById(id)}
                 _selectedItem.value = result.await()
             }catch (e: Exception) {
                 _selectedItem.value = null

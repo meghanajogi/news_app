@@ -53,8 +53,8 @@ class NewsViewModelTest {
     @Test
     fun `test loadItems returns a list of items successfully`() = runTest {
         val mockItems = listOf(
-           NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
-
+          // NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
+            NewsItem(id = 1, userId = 1, title = "Test Title", body = "Test Body")
         )
 
         // Mock Flow return from repository
@@ -102,9 +102,8 @@ class NewsViewModelTest {
 
     @Test
     fun `test loadItemById fetches a specific item`() = runTest {
-        val item= NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
-
-
+        //val item= NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
+        val item = NewsItem(1, 1, "Title", "Body")
         `when`(mockRepository.getItemById(1)).thenReturn(flowOf(Resource.Success(item)))
 
         viewModel.loadItemById(1)

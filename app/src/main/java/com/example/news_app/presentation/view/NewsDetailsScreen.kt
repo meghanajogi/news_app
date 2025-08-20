@@ -55,8 +55,6 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
             })
         }
     ) { padding ->
-
-
         when (val state = item) {
 
             is Resource.Loading -> {
@@ -91,7 +89,5 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
 
             }
         }
-
-
     }
 }

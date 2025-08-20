@@ -63,9 +63,10 @@ dependencies {
     // Mockito for Kotlin (provides 'whenever' function)
     testImplementation("org.mockito.kotlin:mockito-kotlin:6.0.0")
 
-// For mocking final classes and methods
+    // For mocking final classes and methods
     testImplementation("org.mockito:mockito-inline:4.6.1")
-// Coroutine testing
+
+    // Coroutine testing
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
     testImplementation("androidx.arch.core:core-testing:2.1.0")
@@ -74,11 +75,11 @@ dependencies {
     // ViewModel with Compose support
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2")
 
-// Hilt core
+    // Hilt core
     implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-android-compiler:2.49")
 
-// Hilt for Jetpack Compose Navigation
+    // Hilt for Jetpack Compose Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     //retrofit

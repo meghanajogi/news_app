@@ -16,11 +16,11 @@ class NewsViewModel @Inject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
-    private val _items = MutableStateFlow<Resource<List<NewsItem?>>>(Resource.Loading())
-    val items: StateFlow<Resource<List<NewsItem?>>> = _items
+    private val _items = MutableStateFlow<Resource<List<NewsItem>>>(Resource.Loading())
+    val items: StateFlow<Resource<List<NewsItem>>> = _items
 
-    private val _selectedItem = MutableStateFlow<Resource<NewsItem?>>(Resource.Loading())
-    val selectedItem: StateFlow<Resource<NewsItem?>> = _selectedItem
+    private val _selectedItem = MutableStateFlow<Resource<NewsItem>>(Resource.Loading())
+    val selectedItem: StateFlow<Resource<NewsItem>> = _selectedItem
 
 
 

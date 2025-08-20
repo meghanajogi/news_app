@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.news_app.data.model.NewsItem
 import com.example.news_app.data.repository.NewsRepository
+import com.example.news_app.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,20 +16,22 @@ class NewsViewModel @Inject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
-    private val _items = MutableStateFlow<List<NewsItem?>>(emptyList())
-    val items: StateFlow<List<NewsItem?>> = _items
+    private val _items = MutableStateFlow<Resource<List<NewsItem?>>>(Resource.Loading())
+    val items: StateFlow<Resource<List<NewsItem?>>> = _items
 
-    private val _selectedItem = MutableStateFlow<NewsItem?>(null)
-    val selectedItem: StateFlow<NewsItem?> = _selectedItem
+    private val _selectedItem = MutableStateFlow<Resource<NewsItem?>>(Resource.Loading())
+    val selectedItem: StateFlow<Resource<NewsItem?>> = _selectedItem
 
 
 
     fun loadItems() {
         viewModelScope.launch {
             try {
-                _items.value = repository.getNews()
+                repository.getNews().collect { list->
+                    _items.value=list
+                }
             } catch (e: Exception) {
-                _items.value = emptyList()
+                _items.value = Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}")
             }
         }
     }
@@ -39,12 +40,12 @@ class NewsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val result = async(Dispatchers.IO){repository.getItemById(id)}
-                _selectedItem.value = result.await()
+             repository.getItemById(id).collect { item->
+                    _selectedItem.value = item
+                }
             }catch (e: Exception) {
-                _selectedItem.value = null
+                _selectedItem.value = Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}")
             }
-
 
         }
     }

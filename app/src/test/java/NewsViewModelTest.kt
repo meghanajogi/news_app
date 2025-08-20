@@ -2,8 +2,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.news_app.data.model.NewsItem
 import com.example.news_app.data.repository.NewsRepository
 import com.example.news_app.presentation.viewmodel.NewsViewModel
+import com.example.news_app.utils.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
@@ -15,7 +18,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.junit.Assert.*
 
-
+@OptIn(ExperimentalCoroutinesApi::class)
 class NewsViewModelTest {
 
     // Rule to allow live data to work synchronously
@@ -36,6 +39,7 @@ class NewsViewModelTest {
     @get:Rule
     val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
+
     @Before
     fun setup() {
         // Set the dispatcher to our test dispatcher to run coroutines synchronously
@@ -45,80 +49,85 @@ class NewsViewModelTest {
         viewModel = NewsViewModel(mockRepository)
     }
 
+
     @Test
     fun `test loadItems returns a list of items successfully`() = runTest {
-        // Arrange
         val mockItems = listOf(
-            NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
+          // NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
+            NewsItem(id = 1, userId = 1, title = "Test Title", body = "Test Body")
         )
-        `when`(mockRepository.getNews()).thenReturn(mockItems)
 
-        // Act
+        // Mock Flow return from repository
+        `when`(mockRepository.getNews()).thenReturn(flowOf(Resource.Success(mockItems)))
+
         viewModel.loadItems()
 
-        // Assert
-        val result = viewModel.items.first() // Collect the items from the StateFlow
-        assertEquals(mockItems, result)
+        advanceUntilIdle()
+
+        val result = viewModel.items.first()
+        assertTrue(result is Resource.Success)
+        assertEquals(mockItems, (result as Resource.Success).data)
     }
+
 
     @Test
     fun `test loadItems handles empty list`() = runTest {
         // Arrange
         val emptyList = emptyList<NewsItem>()
-        `when`(mockRepository.getNews()).thenReturn(emptyList)
+        `when`(mockRepository.getNews()).thenReturn(flowOf(Resource.Success(emptyList)))
 
         // Act
         viewModel.loadItems()
-
-        // Assert
-        val result = viewModel.items.first()
-        assertTrue(result.isEmpty())
-    }
-
-    @Test
-    fun `test loadItems handles error gracefully`() = runTest {
-        // Arrange
-        `when`(mockRepository.getNews()).thenThrow(RuntimeException("Network Error"))
-
-        // Act
-        viewModel.loadItems()
-
-        // Assert
-        val result = viewModel.items.first()
-        assertTrue(result.isEmpty())  // You can assert for a default empty list or handle error gracefully in your ViewModel
-    }
-
-    @Test
-    fun `test loadItemById fetches a specific item`() = runTest {
-
-
-       val item= NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
-        // Arrange
-       // val item = NewsItem(1, 1, "Test Title", "Test Description")
-        `when`(mockRepository.getItemById(1)).thenReturn(item)
-
-        // Act
-        viewModel.loadItemById(1)
-
         advanceUntilIdle()
 
         // Assert
-        val result = viewModel.selectedItem.first()
-        assertEquals(item, result)
+        val result = viewModel.items.first()
+        assertTrue(result is Resource.Success)
+        assertTrue((result as Resource.Success).data?.isEmpty() == true)
     }
+
 
     @Test
-    fun `test loadItemById returns null for non-existent item`() = runTest {
-        // Arrange
-        `when`(mockRepository.getItemById(99)).thenThrow(NoSuchElementException("Item not found"))
+    fun `test loadItems handles error gracefully`() = runTest {
+        `when`(mockRepository.getNews()).thenReturn(flowOf(Resource.Error("Network Error")))
 
-        // Act
-        viewModel.loadItemById(99)
+        viewModel.loadItems()
+        advanceUntilIdle()
 
-        // Assert
-        val result = viewModel.selectedItem.first()
-        assertNull(result)
+        val result = viewModel.items.first()
+        assertTrue(result is Resource.Error)
+        assertEquals("Network Error", (result as Resource.Error).message)
     }
+
+
+    @Test
+    fun `test loadItemById fetches a specific item`() = runTest {
+        //val item= NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
+        val item = NewsItem(1, 1, "Title", "Body")
+        `when`(mockRepository.getItemById(1)).thenReturn(flowOf(Resource.Success(item)))
+
+        viewModel.loadItemById(1)
+        advanceUntilIdle()
+
+        val result = viewModel.selectedItem.first()
+        assertTrue(result is Resource.Success)
+        assertEquals(item, (result as Resource.Success).data)
+    }
+
+
+
+    @Test
+    fun `test loadItemById returns error for non-existent item`() = runTest {
+        `when`(mockRepository.getItemById(99)).thenReturn(flowOf(Resource.Error("Item not found")))
+
+        viewModel.loadItemById(99)
+        advanceUntilIdle()
+
+        val result = viewModel.selectedItem.first()
+        assertTrue(result is Resource.Error)
+        assertEquals("Item not found", (result as Resource.Error).message)
+    }
+
 
     @After
     fun tearDown() {

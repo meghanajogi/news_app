@@ -9,7 +9,7 @@ A clean architecture mobile application built with Kotlin, featuring Listing and
 - Architecture : Clean Architecture with MVVM (Model - View - ViewModel) pattern
 - Dependency Injection : Hilt
 - Concurrency : Kotlin Coroutines + StateFlow
-- Testing :  JUnit/MockK
+- Testing :  JUnit/Mockito
 
 ## Architecture Overview
 - **Clean Architecture and MVVM**
@@ -21,4 +21,4 @@ Manages dependencies across ViewModels, repositoroes and data sources seamlessly
 - **Coroutines + StateFlow**
 Asynchronous data flow handled via coroutines and state holding via StateFlow, enabling reactive and streamlined UI updates.
 - **Unit Testing**
-ViewModels and domain logic are covered with unit tests using JUnit and MockK for mocling dependencies.
+ViewModels and domain logic are covered with unit tests using JUnit and Mockito for mocking dependencies.

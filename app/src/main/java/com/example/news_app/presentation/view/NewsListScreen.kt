@@ -1,7 +1,7 @@
 package com.example.news_app.presentation.view
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,9 +35,11 @@ import androidx.navigation.NavController
 import com.example.news_app.data.model.NewsItem
 import com.example.news_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.news_app.R
 import com.example.news_app.ui.theme.myCustomFontFamily
+import com.example.news_app.utils.Resource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,24 +57,28 @@ fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hilt
         }
     ) { padding ->
 
-       if(items.isNotEmpty()){
-            LazyColumn(
-                contentPadding = padding,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(items) { item ->
-                    ListItem(item = item) {
-                        navController.navigate("detail/${item?.id}")
-                    }
+        when (val state = items) {
+            is Resource.Loading -> {
+                CircularProgressIndicator()
+            }
+            is Resource.Success->{
+                LazyColumn(
+                    contentPadding = padding,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(state.data ?: emptyList() ) { item ->
+                        ListItem(item = item) {
+                            navController.navigate("detail/${item?.id}")
+                        }
 
+                    }
                 }
             }
-        } else{
-           Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-               CircularProgressIndicator()
-           }
+            is Resource.Error -> {
+                Toast.makeText(LocalContext.current, "${state.message}", Toast.LENGTH_LONG).show()
+            }
 
-       }
+        }
     }
 }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.news_app.data.model.NewsItem
 import com.example.news_app.data.repository.NewsRepository
+import com.example.news_app.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,11 +16,11 @@ class NewsViewModel @Inject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
-    private val _items = MutableStateFlow<List<NewsItem?>>(emptyList())
-    val items: StateFlow<List<NewsItem?>> = _items
+    private val _items = MutableStateFlow<Resource<List<NewsItem?>>>(Resource.Loading())
+    val items: StateFlow<Resource<List<NewsItem?>>> = _items
 
-    private val _selectedItem = MutableStateFlow<NewsItem?>(null)
-    val selectedItem: StateFlow<NewsItem?> = _selectedItem
+    private val _selectedItem = MutableStateFlow<Resource<NewsItem?>>(Resource.Loading())
+    val selectedItem: StateFlow<Resource<NewsItem?>> = _selectedItem
 
 
 
@@ -30,7 +31,7 @@ class NewsViewModel @Inject constructor(
                     _items.value=list
                 }
             } catch (e: Exception) {
-                _items.value = emptyList()
+                _items.value = Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}")
             }
         }
     }
@@ -43,7 +44,7 @@ class NewsViewModel @Inject constructor(
                     _selectedItem.value = item
                 }
             }catch (e: Exception) {
-                _selectedItem.value = null
+                _selectedItem.value = Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}")
             }
 
         }

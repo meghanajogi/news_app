@@ -1,7 +1,7 @@
 package com.example.news_app.presentation.view
 
-import android.util.Log
-import androidx.compose.foundation.Image
+
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,9 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.news_app.data.model.Item
+import com.example.news_app.data.model.NewsItem
 import com.example.news_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.example.news_app.R
+import com.example.news_app.ui.theme.myCustomFontFamily
 import com.example.news_app.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +45,11 @@ fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hilt
     viewModel.loadItems()
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("List Screen") })
+            TopAppBar(title = { Text(stringResource(id = R.string.list_screen),style = TextStyle(
+                fontSize = 26.sp,
+                color = Color.Black,
+                fontFamily = myCustomFontFamily
+            )) })
         }
     ) { padding ->
 
@@ -70,7 +76,7 @@ fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hilt
 }
 
 @Composable
-fun ListItem(item: Item?, onClick: () -> Unit) {
+fun ListItem(item: NewsItem?, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,16 +90,15 @@ fun ListItem(item: Item?, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = item?.title?:"",  style = TextStyle(
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-
+               fontWeight = FontWeight.Bold,
+                fontFamily = myCustomFontFamily
             )
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = item?.body?:"",  style = TextStyle(
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Blue
-
+                color = Color.Blue,
+                fontFamily = myCustomFontFamily
             ))
         }
     }

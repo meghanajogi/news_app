@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.news_app.data.model.NewsItem
 import com.example.news_app.data.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -28,7 +26,9 @@ class NewsViewModel @Inject constructor(
     fun loadItems() {
         viewModelScope.launch {
             try {
-                _items.value = repository.getNews()
+                repository.getNews().collect { list->
+                    _items.value=list
+                }
             } catch (e: Exception) {
                 _items.value = emptyList()
             }
@@ -39,12 +39,12 @@ class NewsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val result = async(Dispatchers.IO){repository.getItemById(id)}
-                _selectedItem.value = result.await()
+             repository.getItemById(id).collect { item->
+                    _selectedItem.value = item
+                }
             }catch (e: Exception) {
                 _selectedItem.value = null
             }
-
 
         }
     }

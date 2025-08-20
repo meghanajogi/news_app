@@ -1,12 +1,13 @@
 package com.example.news_app.presentation.view
 
-
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -32,8 +34,6 @@ import androidx.navigation.NavController
 import com.example.news_app.R
 import com.example.news_app.presentation.viewmodel.NewsViewModel
 import com.example.news_app.ui.theme.myCustomFontFamily
-import com.example.news_app.utils.Constants
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,9 +57,13 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
     ) { padding ->
         item?.let {
             Column(
-                modifier = Modifier
+                modifier = Modifier .padding(padding)
                     .padding(16.dp)
             ) {
+                ImageLoaderView( modifier = Modifier
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(12.dp)))
+
                 Spacer(modifier = Modifier.height(16.dp))
                 it.title?.let { text -> Text(text = text ,style = TextStyle(
                     fontSize = 24.sp,
@@ -73,13 +77,9 @@ fun NewsDetailScreen(navController: NavController,itemId: Int,viewModel: NewsVie
                     fontFamily = myCustomFontFamily
                 )) }
 
-                ImageLoaderView(Constants.IMAGE_URL)
-
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
-
-
     }
 }

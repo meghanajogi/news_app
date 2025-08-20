@@ -1,4 +1,4 @@
-#Mobile App - Listing and Details Screens
+## Mobile App - Listing and Details Screens
 
 A clean architecture mobile application built with Kotlin, featuring Listing and Details screens, fllowing MVVM, Jetpack compose Hilt, Coroutines with StateFlow and unit tests.
 

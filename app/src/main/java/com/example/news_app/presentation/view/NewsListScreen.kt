@@ -107,8 +107,6 @@ Row( modifier = Modifier
     )
     )
 }
-
-
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = item?.body?:"",  style = TextStyle(
                 fontSize = 18.sp,

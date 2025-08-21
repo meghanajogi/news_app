@@ -1,4 +1,4 @@
-package com.example.news_app.presentation.view
+package com.example.news_app.uii.view
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -32,14 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.news_app.data.model.NewsItem
-import com.example.news_app.presentation.viewmodel.NewsViewModel
+import com.example.news_app.uii.viewmodel.NewsViewModel
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.example.domain.model.NewsItem
 import com.example.news_app.R
 import com.example.news_app.ui.theme.myCustomFontFamily
-import com.example.news_app.utils.Resource
+import com.example.domain.utils.Resource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +68,7 @@ fun NewsListScreen(navController: NavController, viewModel: NewsViewModel = hilt
                 ) {
                     items(state.data ?: emptyList() ) { item ->
                         ListItem(item = item) {
-                            navController.navigate("detail/${item?.id}")
+                            navController.navigate("detail/${item.id}")
                         }
 
                     }

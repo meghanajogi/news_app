@@ -43,6 +43,9 @@ android {
 
 dependencies {
 
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -76,18 +79,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2")
 
     // Hilt core
-    implementation("com.google.dagger:hilt-android:2.49")
-    kapt("com.google.dagger:hilt-android-compiler:2.49")
+    implementation("com.google.dagger:hilt-android:2.52")
+    kapt("com.google.dagger:hilt-android-compiler:2.52")
 
     // Hilt for Jetpack Compose Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    //retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // OkHttp logging interceptor for logging network requests
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
     //image loading
     implementation("io.coil-kt:coil-compose:2.3.0")

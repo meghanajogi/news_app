@@ -1,7 +1,7 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.news_app.data.model.NewsItem
 import com.example.news_app.data.repository.NewsRepository
-import com.example.news_app.presentation.viewmodel.NewsViewModel
+import com.example.news_app.uii.viewmodel.NewsViewModel
 import com.example.news_app.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

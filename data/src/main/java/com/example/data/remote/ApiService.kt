@@ -1,6 +1,6 @@
-package com.example.news_app.network
+package com.example.data.remote
 
-import com.example.news_app.data.model.NewsItem
+import com.example.domain.model.NewsItem
 import retrofit2.http.GET
 import retrofit2.http.Path
 

@@ -1,4 +1,4 @@
-package com.example.news_app.presentation.view
+package com.example.news_app.uii.view
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -31,9 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.news_app.R
-import com.example.news_app.presentation.viewmodel.NewsViewModel
+import com.example.news_app.uii.viewmodel.NewsViewModel
 import com.example.news_app.ui.theme.myCustomFontFamily
-import com.example.news_app.utils.Resource
+import com.example.domain.utils.Resource
 
 
 @OptIn(ExperimentalMaterial3Api::class)

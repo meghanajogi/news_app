@@ -1,4 +1,4 @@
-package com.example.news_app.presentation.view
+package com.example.news_app.uii.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.news_app.utils.Constants
+import com.example.domain.utils.Constants
 
 @Composable
 fun ImageLoaderView(modifier: Modifier = Modifier) {

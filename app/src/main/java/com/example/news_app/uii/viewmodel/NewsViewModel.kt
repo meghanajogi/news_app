@@ -1,10 +1,10 @@
-package com.example.news_app.presentation.viewmodel
+package com.example.news_app.uii.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.news_app.data.model.NewsItem
-import com.example.news_app.data.repository.NewsRepository
-import com.example.news_app.utils.Resource
+import com.example.domain.model.NewsItem
+import com.example.domain.repository.NewsRepository
+import com.example.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ class NewsViewModel @Inject constructor(
     fun loadItems() {
         viewModelScope.launch {
             try {
-                repository.getNews().collect { list->
+                repository.getItems().collect { list->
                     _items.value=list
                 }
             } catch (e: Exception) {

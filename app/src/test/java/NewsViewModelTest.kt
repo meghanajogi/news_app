@@ -1,8 +1,8 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.news_app.data.model.NewsItem
-import com.example.news_app.data.repository.NewsRepository
+import com.example.domain.model.NewsItem
+import com.example.domain.repository.NewsRepository
+import com.example.domain.utils.Resource
 import com.example.news_app.uii.viewmodel.NewsViewModel
-import com.example.news_app.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -58,7 +58,7 @@ class NewsViewModelTest {
         )
 
         // Mock Flow return from repository
-        `when`(mockRepository.getNews()).thenReturn(flowOf(Resource.Success(mockItems)))
+        `when`(mockRepository.getItems()).thenReturn(flowOf(Resource.Success(mockItems)))
 
         viewModel.loadItems()
 
@@ -74,7 +74,7 @@ class NewsViewModelTest {
     fun `test loadItems handles empty list`() = runTest {
         // Arrange
         val emptyList = emptyList<NewsItem>()
-        `when`(mockRepository.getNews()).thenReturn(flowOf(Resource.Success(emptyList)))
+        `when`(mockRepository.getItems()).thenReturn(flowOf(Resource.Success(emptyList)))
 
         // Act
         viewModel.loadItems()
@@ -89,7 +89,7 @@ class NewsViewModelTest {
 
     @Test
     fun `test loadItems handles error gracefully`() = runTest {
-        `when`(mockRepository.getNews()).thenReturn(flowOf(Resource.Error("Network Error")))
+        `when`(mockRepository.getItems()).thenReturn(flowOf(Resource.Error("Network Error")))
 
         viewModel.loadItems()
         advanceUntilIdle()

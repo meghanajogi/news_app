@@ -5,17 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.example.news_app.uii.view.NewsDetailScreen
-import com.example.news_app.uii.view.NewsListScreen
 import com.example.news_app.ui.theme.News_appTheme
-import com.example.news_app.uii.AppNavGraph
+import com.example.news_app.ui.navigation.AppNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,25 +21,6 @@ class MainActivity : ComponentActivity() {
                     AppNavGraph()
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "list") {
-        composable("list") {
-            NewsListScreen(navController)
-        }
-        composable(
-            route = "detail/{itemId}",
-            arguments = listOf(navArgument("itemId") {
-                type = NavType.IntType
-            })
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
-            NewsDetailScreen(navController,itemId = itemId)
         }
     }
 }

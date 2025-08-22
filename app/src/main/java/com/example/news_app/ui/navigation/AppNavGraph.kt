@@ -1,4 +1,4 @@
-package com.example.news_app.uii
+package com.example.news_app.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.news_app.uii.view.NewsDetailScreen
-import com.example.news_app.uii.view.NewsListScreen
+import com.example.news_app.ui.view.NewsDetailScreen
+import com.example.news_app.ui.view.NewsListScreen
 
 
 @Composable

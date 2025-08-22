@@ -3,14 +3,14 @@ package com.example.data.repository
 import com.example.data.remote.ApiService
 import com.example.domain.model.NewsItem
 import com.example.domain.repository.NewsRepository
-import com.example.domain.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
-
+import com.example.data.remote.dto.toDomain
+import com.example.domain.utils.Resource
 
 @Singleton
 class NewsRepositoryImpl @Inject constructor(private val apiService: ApiService): NewsRepository {
@@ -18,7 +18,7 @@ class NewsRepositoryImpl @Inject constructor(private val apiService: ApiService)
         emit(Resource.Loading())
         try {
             val response = apiService.getPosts()
-            emit(Resource.Success(response))
+            emit(Resource.Success(response.map { it.toDomain() }))
         } catch (e: Exception) {
             emit(Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}"))
         }
@@ -28,7 +28,7 @@ class NewsRepositoryImpl @Inject constructor(private val apiService: ApiService)
         emit(Resource.Loading())
         try {
             val response =  apiService.getPostById(id)
-            emit(Resource.Success(response))
+            emit(Resource.Success(response.toDomain()))
         } catch (e: Exception) {
             emit(Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}"))
         }

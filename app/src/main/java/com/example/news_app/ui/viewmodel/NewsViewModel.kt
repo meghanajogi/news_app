@@ -1,9 +1,10 @@
-package com.example.news_app.uii.viewmodel
+package com.example.news_app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.NewsItem
-import com.example.domain.repository.NewsRepository
+import com.example.domain.usecase.GetItemDetailsUseCase
+import com.example.domain.usecase.GetItemsUseCase
 import com.example.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val repository: NewsRepository
+    private val getNewsListUseCase: GetItemsUseCase, private val getItemDetailsUseCase: GetItemDetailsUseCase
 ) : ViewModel() {
 
     private val _items = MutableStateFlow<Resource<List<NewsItem>>>(Resource.Loading())
@@ -27,7 +28,7 @@ class NewsViewModel @Inject constructor(
     fun loadItems() {
         viewModelScope.launch {
             try {
-                repository.getItems().collect { list->
+                getNewsListUseCase().collect { list->
                     _items.value=list
                 }
             } catch (e: Exception) {
@@ -40,7 +41,7 @@ class NewsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-             repository.getItemById(id).collect { item->
+             getItemDetailsUseCase(id).collect { item->
                     _selectedItem.value = item
                 }
             }catch (e: Exception) {

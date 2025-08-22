@@ -1,4 +1,4 @@
-package com.example.news_app.uii.view
+package com.example.news_app.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

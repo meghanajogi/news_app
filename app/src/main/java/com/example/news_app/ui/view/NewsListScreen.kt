@@ -1,4 +1,4 @@
-package com.example.news_app.uii.view
+package com.example.news_app.ui.view
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.news_app.uii.viewmodel.NewsViewModel
+import com.example.news_app.ui.viewmodel.NewsViewModel
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource

@@ -1,8 +1,9 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.domain.model.NewsItem
-import com.example.domain.repository.NewsRepository
+import com.example.domain.usecase.GetItemDetailsUseCase
+import com.example.domain.usecase.GetItemsUseCase
 import com.example.domain.utils.Resource
-import com.example.news_app.uii.viewmodel.NewsViewModel
+import com.example.news_app.ui.viewmodel.NewsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -33,7 +34,10 @@ class NewsViewModelTest {
 
     // Mock the repository
     @Mock
-    private lateinit var mockRepository: NewsRepository
+    private lateinit var getItemUseCase: GetItemsUseCase
+
+    @Mock
+    private lateinit var getItemDetailsUseCase: GetItemDetailsUseCase
 
     // Initialize Mockito mocks
     @get:Rule
@@ -46,7 +50,7 @@ class NewsViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         // Create ViewModel with the mock repository
-        viewModel = NewsViewModel(mockRepository)
+        viewModel = NewsViewModel(getItemUseCase,getItemDetailsUseCase)
     }
 
 
@@ -58,7 +62,7 @@ class NewsViewModelTest {
         )
 
         // Mock Flow return from repository
-        `when`(mockRepository.getItems()).thenReturn(flowOf(Resource.Success(mockItems)))
+        `when`(getItemUseCase()).thenReturn(flowOf(Resource.Success(mockItems)))
 
         viewModel.loadItems()
 
@@ -74,7 +78,7 @@ class NewsViewModelTest {
     fun `test loadItems handles empty list`() = runTest {
         // Arrange
         val emptyList = emptyList<NewsItem>()
-        `when`(mockRepository.getItems()).thenReturn(flowOf(Resource.Success(emptyList)))
+        `when`(getItemUseCase()).thenReturn(flowOf(Resource.Success(emptyList)))
 
         // Act
         viewModel.loadItems()
@@ -89,7 +93,7 @@ class NewsViewModelTest {
 
     @Test
     fun `test loadItems handles error gracefully`() = runTest {
-        `when`(mockRepository.getItems()).thenReturn(flowOf(Resource.Error("Network Error")))
+        `when`(getItemUseCase()).thenReturn(flowOf(Resource.Error("Network Error")))
 
         viewModel.loadItems()
         advanceUntilIdle()
@@ -104,7 +108,7 @@ class NewsViewModelTest {
     fun `test loadItemById fetches a specific item`() = runTest {
         //val item= NewsItem(id=1, userId=1, title="sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body="quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto")
         val item = NewsItem(1, 1, "Title", "Body")
-        `when`(mockRepository.getItemById(1)).thenReturn(flowOf(Resource.Success(item)))
+        `when`(getItemDetailsUseCase(1)).thenReturn(flowOf(Resource.Success(item)))
 
         viewModel.loadItemById(1)
         advanceUntilIdle()
@@ -118,7 +122,7 @@ class NewsViewModelTest {
 
     @Test
     fun `test loadItemById returns error for non-existent item`() = runTest {
-        `when`(mockRepository.getItemById(99)).thenReturn(flowOf(Resource.Error("Item not found")))
+        `when`(getItemDetailsUseCase(99)).thenReturn(flowOf(Resource.Error("Item not found")))
 
         viewModel.loadItemById(99)
         advanceUntilIdle()

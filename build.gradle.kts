@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         // Make sure you're using a stable version of the Hilt Gradle plugin
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.49")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.52")
     }
 }
 
@@ -16,5 +16,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
     id("com.android.library") version "8.12.0" apply false
-    id("com.google.dagger.hilt.android") version "2.49" apply false  // Hilt plugin version
+    id("com.google.dagger.hilt.android") version "2.52" apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false  // Hilt plugin version
 }

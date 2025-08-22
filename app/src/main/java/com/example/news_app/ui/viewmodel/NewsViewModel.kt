@@ -1,0 +1,53 @@
+package com.example.news_app.ui.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.domain.model.NewsItem
+import com.example.domain.usecase.GetItemDetailsUseCase
+import com.example.domain.usecase.GetItemsUseCase
+import com.example.domain.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val getNewsListUseCase: GetItemsUseCase, private val getItemDetailsUseCase: GetItemDetailsUseCase
+) : ViewModel() {
+
+    private val _items = MutableStateFlow<Resource<List<NewsItem>>>(Resource.Loading())
+    val items: StateFlow<Resource<List<NewsItem>>> = _items
+
+    private val _selectedItem = MutableStateFlow<Resource<NewsItem>>(Resource.Loading())
+    val selectedItem: StateFlow<Resource<NewsItem>> = _selectedItem
+
+
+
+    fun loadItems() {
+        viewModelScope.launch {
+            try {
+                getNewsListUseCase().collect { list->
+                    _items.value=list
+                }
+            } catch (e: Exception) {
+                _items.value = Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}")
+            }
+        }
+    }
+
+    fun loadItemById(id: Int) {
+
+        viewModelScope.launch {
+            try {
+             getItemDetailsUseCase(id).collect { item->
+                    _selectedItem.value = item
+                }
+            }catch (e: Exception) {
+                _selectedItem.value = Resource.Error("Failed to load news: ${e.localizedMessage ?: "Unknown error"}")
+            }
+
+        }
+    }
+}

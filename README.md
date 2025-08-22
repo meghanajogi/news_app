@@ -25,9 +25,9 @@ Screen transitions are handled using the Jetpack Navigation Component for Compos
 - **Dependency Injection with Hilt**
 Hilt simplifies dependency management by injecting ViewModels, repositories, and data sources across modules. Reusable bindings are defined in Hilt modules for consistency and testability.
 - **Networking & Data Handling**
-Retrofit is used for network calls.
-Gson handles JSON serialization and deserialization.
-DTOs map API responses and are transformed into domain models before reaching the UI.
+- Retrofit is used for network calls.
+- Gson handles JSON serialization and deserialization.
+- DTOs map API responses and are transformed into domain models before reaching the UI.
 - **Coroutines + Flow/StateFlow**
 - Asynchronous operations are managed with Kotlin Coroutines.
 - Flow is used for data streams (e.g., network responses).
